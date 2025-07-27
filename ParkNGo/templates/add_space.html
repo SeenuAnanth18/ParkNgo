@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Add Parking Space</h2>
+<form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+    </div>
+    <div class="mb-3">
+        <label for="address" class="form-label">Address</label>
+        <input type="text" class="form-control" id="address" name="address" required>
+    </div>
+    <div class="mb-3">
+        <label for="city" class="form-label">City</label>
+        <select class="form-select" id="city" name="city" onchange="updateAreas()" required>
+            <option value="">Select City</option>
+            {% for city in cities %}
+            <option value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="area" class="form-label">Area</label>
+        <select class="form-select" id="area" name="area" required>
+            <option value="">Select Area</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price per Hour ($)</label>
+        <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+    </div>
+    <div class="mb-3">
+        <label for="total_slots" class="form-label">Total Parking Slots</label>
+        <input type="number" class="form-control" id="total_slots" name="total_slots" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description (Optional)</label>
+        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">Image</label>
+        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Space</button>
+</form>
+
+<script>
+const cities = ['New York', 'Los Angeles', 'Chicago'];
+
+const areas = {
+  'New York': ['Manhattan', 'Brooklyn', 'Queens'],
+  'Los Angeles': ['Downtown', 'Hollywood', 'Santa Monica'],
+  'Chicago': ['Loop', 'Lincoln Park', 'Wicker Park']
+};
+function updateAreas() {
+    const city = document.getElementById('city').value;
+    const areaSelect = document.getElementById('area');
+    areaSelect.innerHTML = '<option value="">Select Area</option>';
+    
+    if (city && areas[city]) {
+        areas[city].forEach(area => {
+            const option = document.createElement('option');
+            option.value = area;
+            option.textContent = area;
+            areaSelect.appendChild(option);
+        });
+    }
+}
+</script>
+{% endblock %}

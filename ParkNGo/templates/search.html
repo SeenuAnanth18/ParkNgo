@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Search Parking Spaces</h2>
+<form method="POST" class="mb-4">
+    <div class="row">
+        <div class="col-md-5 mb-3">
+            <label for="city" class="form-label">City</label>
+            <select class="form-select" id="city" name="city" onchange="updateAreas()" required>
+                <option value="">Select City</option>
+                {% for city in cities %}
+                <option value="{{ city }}">{{ city }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-5 mb-3">
+            <label for="area" class="form-label">Area</label>
+            <select class="form-select" id="area" name="area" required>
+                <option value="">Select Area</option>
+            </select>
+        </div>
+        <div class="col-md-2 mb-3 align-self-end">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for space in spaces %}
+    <div class="col">
+        <div class="card h-100">
+            {% if space.image %}
+            <img src="{{ url_for('static', filename='uploads/' + space.image) }}" class="card-img-top" alt="{{ space.title }}">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ space.title }}</h5>
+                <p class="card-text">
+                    <strong>Location:</strong> {{ space.address }}<br>
+                    <strong>City:</strong> {{ space.city }}<br>
+                    <strong>Area:</strong> {{ space.area }}<br>
+                    <strong>Price:</strong> ${{ space.price_per_hour }}/hour<br>
+                    <strong>Available Slots:</strong> {{ space.available_slots }}/{{ space.total_slots }}
+                </p>
+                <a href="{{ url_for('space_details', space_id=space.id) }}" class="btn btn-primary">View Details</a>
+                {% if session.user_id %}
+                <a href="{{ url_for('book_space', space_id=space.id) }}" class="btn btn-success">Book Now</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p>No parking spaces found.</p>
+    {% endfor %}
+</div>
+
+<script>
+const cities = ['New York', 'Los Angeles', 'Chicago'];
+
+const areas = {
+  'New York': ['Manhattan', 'Brooklyn', 'Queens'],
+  'Los Angeles': ['Downtown', 'Hollywood', 'Santa Monica'],
+  'Chicago': ['Loop', 'Lincoln Park', 'Wicker Park']
+};
+function updateAreas() {
+    const city = document.getElementById('city').value;
+    const areaSelect = document.getElementById('area');
+    areaSelect.innerHTML = '<option value="">Select Area</option>';
+    
+    if (city && areas[city]) {
+        areas[city].forEach(area => {
+            const option = document.createElement('option');
+            option.value = area;
+            option.textContent = area;
+            areaSelect.appendChild(option);
+        });
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Book Parking Space: {{ space.title }}</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Booking Details</h5>
+        <p class="card-text">
+            <strong>User:</strong> {{ user.name }}<br>
+            <strong>Contact:</strong> {{ user.contact }}<br>
+            <strong>Parking Space:</strong> {{ space.title }}<br>
+            <strong>Price:</strong> ${{ space.price_per_hour }}/hour<br>
+            <strong>Within 1 hour Check-in only Accepted, otherwise Rejected</strong>
+        </p>
+        <form method="POST" action="{{ url_for('book_space', space_id=space.id) }}">
+    <div class="mb-3">
+        <label for="hours" class="form-label">Number of Hours</label>
+        <input type="number" class="form-control" name="hours" required min="1">
+    </div>
+    <button type="submit" class="btn btn-primary">Book Now</button>
+</form>
+    </div>
+</div>
+{% endblock %}

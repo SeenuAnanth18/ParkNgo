@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="mb-4">{{ space.title }}</h2>
+<div class="card">
+    {% if space.image %}
+    <img src="{{ url_for('static', filename='uploads/' + space.image) }}" class="card-img-top" alt="{{ space.title }}">
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">{{ space.title }}</h5>
+        <p class="card-text">
+            <strong>Address:</strong> {{ space.address }}<br>
+            <strong>City:</strong> {{ space.city }}<br>
+            <strong>Area:</strong> {{ space.area }}<br>
+            <strong>Price:</strong> ${{ space.price_per_hour }}/hour<br>
+            <strong>Available Slots:</strong> {{ space.available_slots }}/{{ space.total_slots }}<br>
+            <strong>Description:</strong> {{ space.description or 'No description provided' }}
+        </p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+        {% if session.user_id %}
+        <a href="{{ url_for('book_space', space_id=space.id) }}" class="btn btn-success">Book Now</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
